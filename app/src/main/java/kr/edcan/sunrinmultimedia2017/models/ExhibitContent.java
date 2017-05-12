@@ -75,4 +75,8 @@ public class ExhibitContent {
     public void setFileName(ArrayList<String> fileName) {
         this.fileName = fileName;
     }
+
+    public String getRealType() {
+        return "그래픽";
+    }
 }
