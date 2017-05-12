@@ -1,7 +1,9 @@
-package kr.edcan.sunrinmultimedia2017;
+package kr.edcan.sunrinmultimedia2017.activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import kr.edcan.sunrinmultimedia2017.R;
 
 public class MainActivity extends AppCompatActivity {
 
