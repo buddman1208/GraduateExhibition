@@ -10,6 +10,9 @@ public class ExhibitContent {
     private String fileType, projectName, korAutor, engAutor, email, projectId;
     private ArrayList<String> fileName;
 
+    public ExhibitContent() {
+    }
+
     public ExhibitContent(String fileType, String projectName, String korAutor, String engAutor, String email, String projectId, ArrayList<String> fileName) {
         this.fileType = fileType;
         this.projectName = projectName;
