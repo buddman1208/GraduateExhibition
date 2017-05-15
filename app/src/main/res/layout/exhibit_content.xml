@@ -5,12 +5,15 @@
         <variable
             name="content"
             type="kr.edcan.sunrinmultimedia2017.models.ExhibitContent" />
+        <variable
+            name="activity"
+            type="kr.edcan.sunrinmultimedia2017.activity.MainActivity"/>
     </data>
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="170dp"
-        android:clickable="true"
+        android:onClick="@{() -> activity.onCardClick(content.projectId)}"
         android:foreground="?attr/selectableItemBackground"
         android:orientation="vertical">
 

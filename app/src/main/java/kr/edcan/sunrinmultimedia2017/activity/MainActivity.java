@@ -1,5 +1,6 @@
 package kr.edcan.sunrinmultimedia2017.activity;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.support.v7.app.AppCompatActivity;
@@ -35,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     ArrayList<Integer> offResList = new ArrayList<>();
 
     private RecyclerView mainRecyclerView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,10 +75,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         dataList.add(new ExhibitContent());
         dataList.add(new ExhibitContent());
         LastAdapter.with(dataList, BR.content)
-                .map(ExhibitContent.class, new ItemType<ExhibitContentBinding>(R.layout.exhibit_content){
+                .map(ExhibitContent.class, new ItemType<ExhibitContentBinding>(R.layout.exhibit_content) {
                     @Override
                     public void onBind(@NotNull ViewHolder<ExhibitContentBinding> viewHolder) {
                         super.onBind(viewHolder);
+                        viewHolder.getBinding().setActivity(MainActivity.this);
 //                        viewHolder.getBinding().image.setImageUrl("", ImageSingleTon.getInstance(getApplicationContext()).getImageLoader());
                     }
                 })
@@ -112,5 +115,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 setTab(5);
                 break;
         }
+    }
+
+    public void onCardClick(String projectId) {
+        startActivity(new Intent(getApplicationContext(), ViewActivity.class)
+                .putExtra("projectId", projectId));
     }
 }

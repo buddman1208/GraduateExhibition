@@ -1,18 +1,83 @@
 package kr.edcan.sunrinmultimedia2017.activity;
 
-import android.support.v7.app.AppCompatActivity;
+import android.databinding.DataBindingUtil;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.ImageView;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 
 import kr.edcan.sunrinmultimedia2017.R;
+import kr.edcan.sunrinmultimedia2017.databinding.ActivityViewBinding;
+import kr.edcan.sunrinmultimedia2017.fragment.ViewFragment;
 
 public class ViewActivity extends AppCompatActivity {
+
+    private ActivityViewBinding binding;
+    private SectionsPagerAdapter mSectionsPagerAdapter;
+    private ViewPager mViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_view);
+        setDefault();
+        setToolbar();
+    }
+
+    private void setDefault() {
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        mViewPager = binding.viewPager;
+        mViewPager.setAdapter(mSectionsPagerAdapter);
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
+        tabLayout.setupWithViewPager(mViewPager);
+    }
+
+    private void setToolbar() {
+        setSupportActionBar(binding.toolbar);
+        getSupportActionBar().setTitle("작품 보기");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.WHITE));
 
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) finish();
+        return super.onOptionsItemSelected(item);
+    }
+
+    class SectionsPagerAdapter extends FragmentPagerAdapter {
+
+        SectionsPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return ViewFragment.newInstance(position);
+        }
+
+        @Override
+        public int getCount() {
+            return 2;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            switch (position) {
+                case 0:
+                    return "작품";
+                case 1:
+                    return "만든이";
+            }
+            return null;
+        }
+    }
+
 }
