@@ -7,10 +7,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.android.databinding.library.baseAdapters.BR;
+import com.android.volley.Network;
 import com.github.nitrico.lastadapter.ItemType;
 import com.github.nitrico.lastadapter.LastAdapter;
 import com.github.nitrico.lastadapter.ViewHolder;
@@ -25,6 +28,10 @@ import kr.edcan.sunrinmultimedia2017.databinding.ActivityMainBinding;
 import kr.edcan.sunrinmultimedia2017.databinding.ExhibitContentBinding;
 import kr.edcan.sunrinmultimedia2017.models.ExhibitContent;
 import kr.edcan.sunrinmultimedia2017.utils.ImageSingleTon;
+import kr.edcan.sunrinmultimedia2017.utils.NetworkHelper;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -35,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     ArrayList<Integer> onResList = new ArrayList<>();
     ArrayList<Integer> offResList = new ArrayList<>();
 
+    private LastAdapter adapter;
     private RecyclerView mainRecyclerView;
 
     @Override
@@ -72,18 +80,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         getSupportActionBar().setTitle("모든 작품 보기");
         mainRecyclerView = binding.mainRecyclerView;
         mainRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        dataList.add(new ExhibitContent());
-        dataList.add(new ExhibitContent());
-        LastAdapter.with(dataList, BR.content)
-                .map(ExhibitContent.class, new ItemType<ExhibitContentBinding>(R.layout.exhibit_content) {
-                    @Override
-                    public void onBind(@NotNull ViewHolder<ExhibitContentBinding> viewHolder) {
-                        super.onBind(viewHolder);
-                        viewHolder.getBinding().setActivity(MainActivity.this);
-//                        viewHolder.getBinding().image.setImageUrl("", ImageSingleTon.getInstance(getApplicationContext()).getImageLoader());
-                    }
-                })
-                .into(mainRecyclerView);
+        setTab(0);
     }
 
     private void setTab(int position) {
@@ -91,6 +88,68 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             tabList.get(i).setImageResource((i == position) ? onResList.get(i) : offResList.get(i));
             tabIndicatorList.get(i).setVisibility((i == position) ? View.VISIBLE : View.INVISIBLE);
         }
+        if (position == 0) {
+            NetworkHelper.getNetworkInstance().getAllProjects().enqueue(new Callback<ArrayList<ExhibitContent>>() {
+                @Override
+                public void onResponse(Call<ArrayList<ExhibitContent>> call, Response<ArrayList<ExhibitContent>> response) {
+                    switch (response.code()){
+                        case 200:
+                            for(ExhibitContent content: response.body()){
+                                dataList.add(content);
+                                if(adapter == null) initializeRecyclerView();
+                                else adapter.notifyDataSetChanged();
+                            }
+                            break;
+                        default:
+                            Toast.makeText(MainActivity.this, "데이터를 가져오는 데 문제가 발생했습니다. 잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ArrayList<ExhibitContent>> call, Throwable t) {
+                    Toast.makeText(MainActivity.this, "데이터를 가져오는 데 문제가 발생했습니다. 잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+                    Log.e("asdf", t.getLocalizedMessage());
+
+                }
+            });
+        }
+        else {
+            NetworkHelper.getNetworkInstance().getProjectsByFileType(position).enqueue(new Callback<ArrayList<ExhibitContent>>() {
+                @Override
+                public void onResponse(Call<ArrayList<ExhibitContent>> call, Response<ArrayList<ExhibitContent>> response) {
+                    switch (response.code()){
+                        case 200:
+                            for(ExhibitContent content: response.body()){
+                                dataList.add(content);
+                                if(adapter == null) initializeRecyclerView();
+                                else adapter.notifyDataSetChanged();
+                            }
+                            break;
+                        default:
+                            Toast.makeText(MainActivity.this, "데이터를 가져오는 데 문제가 발생했습니다. 잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ArrayList<ExhibitContent>> call, Throwable t) {
+                    Toast.makeText(MainActivity.this, "데이터를 가져오는 데 문제가 발생했습니다. 잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+                    Log.e("asdf", t.getLocalizedMessage());
+                }
+            });
+        }
+    }
+    public void initializeRecyclerView(){
+        adapter = LastAdapter.with(dataList, BR.content)
+                .map(ExhibitContent.class, new ItemType<ExhibitContentBinding>(R.layout.exhibit_content) {
+                    @Override
+                    public void onBind(@NotNull ViewHolder<ExhibitContentBinding> viewHolder) {
+                        super.onBind(viewHolder);
+                        viewHolder.getBinding().setActivity(MainActivity.this);
+                        viewHolder.getBinding().image.setImageUrl(
+                                dataList.get(viewHolder.getAdapterPosition()).getFileName().get(0), ImageSingleTon.getInstance(getApplicationContext()).getImageLoader());
+                    }
+                })
+                .into(mainRecyclerView);
     }
 
     @Override
