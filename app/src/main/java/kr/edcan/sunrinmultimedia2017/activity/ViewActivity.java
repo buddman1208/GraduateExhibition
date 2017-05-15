@@ -21,6 +21,8 @@ public class ViewActivity extends AppCompatActivity {
     private ActivityViewBinding binding;
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
+    private String projectId = "";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +30,7 @@ public class ViewActivity extends AppCompatActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_view);
         setDefault();
         setToolbar();
+        projectId = getIntent().getStringExtra("projectId");
     }
 
     private void setDefault() {

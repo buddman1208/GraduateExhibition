@@ -6,9 +6,11 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.android.databinding.library.baseAdapters.BR;
 import com.android.volley.toolbox.ImageLoader;
@@ -23,25 +25,33 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 import kr.edcan.sunrinmultimedia2017.R;
+import kr.edcan.sunrinmultimedia2017.activity.MainActivity;
 import kr.edcan.sunrinmultimedia2017.databinding.AuthorContentBinding;
 import kr.edcan.sunrinmultimedia2017.databinding.ViewContentBinding;
 import kr.edcan.sunrinmultimedia2017.databinding.ViewContentHeaderBinding;
 import kr.edcan.sunrinmultimedia2017.databinding.ViewExhibitAuthorBinding;
 import kr.edcan.sunrinmultimedia2017.databinding.ViewExhibitContentBinding;
 import kr.edcan.sunrinmultimedia2017.models.Author;
+import kr.edcan.sunrinmultimedia2017.models.ExhibitContent;
 import kr.edcan.sunrinmultimedia2017.models.ExhibitContentHeader;
+import kr.edcan.sunrinmultimedia2017.models.ExhibitContentSingleTon;
 import kr.edcan.sunrinmultimedia2017.utils.ImageSingleTon;
+import kr.edcan.sunrinmultimedia2017.utils.NetworkHelper;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by Junseok Oh on 2017-05-13.
  */
 public class ViewFragment extends Fragment {
     private static final String ARG_SECTION_NUMBER = "pageNumber";
-
     private RecyclerView authorRecyclerView;
     private RecyclerView contentRecyclerView;
     private ArrayList<Author> authorList = new ArrayList<>();
     private ArrayList<Object> contentList = new ArrayList<>();
+    private ExhibitContent currentContent = null;
+
     public ViewFragment() {
     }
 
@@ -76,69 +86,135 @@ public class ViewFragment extends Fragment {
         contentRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         // Get Image List from Server
-        int imageLength = 3;
-        contentList.add(new ExhibitContentHeader(
-                "제목", "Lorem UPsum Lorem UPsum Lorem UPsum Lorem UPsum Lorem UPsum Lorem UPsum Lorem UPsum Lorem UPsum ",
-                3
-        ));
-        for (int i = 0; i < imageLength; i++) {
-            contentList.add("https://github.com/Luminon/sunrinmultimedia5th_webdesign/blob/master/Android/screenshots/previewArticle_profile.png?raw=true");
-        }
+        getExhibitInfo();
 
-        LastAdapter.with(contentList, BR.content)
-                .map(ExhibitContentHeader.class, new ItemType<ViewContentHeaderBinding>(R.layout.view_content_header){
-                    @Override
-                    public void onBind(@NotNull ViewHolder<ViewContentHeaderBinding> viewHolder) {
-                        super.onBind(viewHolder);
-                    }
-                })
-                .map(String.class, new ItemType<ViewContentBinding>(R.layout.view_content){
-                    @Override
-                    public void onBind(@NotNull ViewHolder<ViewContentBinding> viewHolder) {
-                        super.onBind(viewHolder);
-                        viewHolder.getBinding().networkImageView.setImageUrl(
-                                (String) contentList.get(viewHolder.getAdapterPosition()),
-                                ImageSingleTon.getInstance(getContext()).getImageLoader()
-                        );
-                    }
-                })
-                .handler(new LayoutHandler() {
-                    @Override
-                    public int getItemLayout(@NotNull Object o, int i) {
-                        if(o instanceof ExhibitContentHeader) return R.layout.view_content_header;
-                        return R.layout.view_content;
-                    }
-                })
-                .into(contentRecyclerView);
+
     }
 
 
     private void initializeAuthorTab(ViewExhibitAuthorBinding authorBinding) {
         authorRecyclerView = authorBinding.writerRecyclerView;
         authorRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        authorList.add(new Author("오준석", "Junseok Oh", "kotohana5706@edcan.kr", "https://images.discordapp.net/.eJwNwlEKwyAMANC7eACjs1bt7w4yRIMW2kZM9jFG77493le956E21UUGbwB150KzahaauaFuRO3APHbWhU7IIrn0Ey9hcOZhTIo2mRSij2aJ4Kzzdv0PznobU1jh2almfH2QBiPpcTV1_wAD3CV6.0sGGeOb5SfaXH5FTwzSQSDSiGJQ"));
-        authorList.add(new Author("오준석", "Junseok Oh", "kotohana5706@edcan.kr", "https://images.discordapp.net/.eJwNwlEKwyAMANC7eACjs1bt7w4yRIMW2kZM9jFG77493le956E21UUGbwB150KzahaauaFuRO3APHbWhU7IIrn0Ey9hcOZhTIo2mRSij2aJ4Kzzdv0PznobU1jh2almfH2QBiPpcTV1_wAD3CV6.0sGGeOb5SfaXH5FTwzSQSDSiGJQ"));
-        authorList.add(new Author("오준석", "Junseok Oh", "kotohana5706@edcan.kr", "https://images.discordapp.net/.eJwNwlEKwyAMANC7eACjs1bt7w4yRIMW2kZM9jFG77493le956E21UUGbwB150KzahaauaFuRO3APHbWhU7IIrn0Ey9hcOZhTIo2mRSij2aJ4Kzzdv0PznobU1jh2almfH2QBiPpcTV1_wAD3CV6.0sGGeOb5SfaXH5FTwzSQSDSiGJQ"));
-        authorList.add(new Author("오준석", "Junseok Oh", "kotohana5706@edcan.kr", "https://images.discordapp.net/.eJwNwlEKwyAMANC7eACjs1bt7w4yRIMW2kZM9jFG77493le956E21UUGbwB150KzahaauaFuRO3APHbWhU7IIrn0Ey9hcOZhTIo2mRSij2aJ4Kzzdv0PznobU1jh2almfH2QBiPpcTV1_wAD3CV6.0sGGeOb5SfaXH5FTwzSQSDSiGJQ"));
 
-        LastAdapter.with(authorList, BR.content)
-                .map(Author.class, new ItemType<AuthorContentBinding>(R.layout.author_content){
-                    @Override
-                    public void onBind(@NotNull ViewHolder<AuthorContentBinding> viewHolder) {
-                        super.onBind(viewHolder);
-                        viewHolder.getBinding().profileImage.setImageUrl(
-                                authorList.get(viewHolder.getAdapterPosition()).getProfileImageUrl(),
-                                ImageSingleTon.getInstance(getContext()).getImageLoader()
-                        );
+        NetworkHelper.getNetworkInstance().getAuthorList(ExhibitContentSingleTon.currentSelectedProjectId).enqueue(new Callback<ArrayList<Author>>() {
+            @Override
+            public void onResponse(Call<ArrayList<Author>> call, Response<ArrayList<Author>> response) {
+                switch (response.code()) {
+                    case 200:
+                        for (Author a : response.body()) {
+                            authorList.add(a);
+                        }
+                        LastAdapter.with(authorList, BR.content)
+                                .map(Author.class, new ItemType<AuthorContentBinding>(R.layout.author_content) {
+                                    @Override
+                                    public void onBind(@NotNull ViewHolder<AuthorContentBinding> viewHolder) {
+                                        super.onBind(viewHolder);
+                                        viewHolder.getBinding().profileImage.setImageUrl(
+                                                authorList.get(viewHolder.getAdapterPosition()).getProfileImageUrl(),
+                                                ImageSingleTon.getInstance(getContext()).getImageLoader()
+                                        );
 
-                    }
-                })
-                .handler(new LayoutHandler() {
-                    @Override
-                    public int getItemLayout(@NotNull Object o, int i) {
-                        return R.layout.author_content;
-                    }
-                })
-                .into(authorRecyclerView);
+                                    }
+                                })
+                                .handler(new LayoutHandler() {
+                                    @Override
+                                    public int getItemLayout(@NotNull Object o, int i) {
+                                        return R.layout.author_content;
+                                    }
+                                })
+                                .into(authorRecyclerView);
+
+                        break;
+                    default:
+                        Toast.makeText(getContext(), "데이터를 가져오는 데 문제가 발생했습니다. 잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<Author>> call, Throwable t) {
+                Toast.makeText(getContext(), "데이터를 가져오는 데 문제가 발생했습니다. 잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+                Log.e("asdf", t.getLocalizedMessage());
+            }
+        });
+    }
+
+    public void getExhibitInfo() {
+        NetworkHelper.getNetworkInstance().getProjectsByProjectId(ExhibitContentSingleTon.currentSelectedProjectId).enqueue(new Callback<ExhibitContent>() {
+            @Override
+            public void onResponse(Call<ExhibitContent> call, Response<ExhibitContent> response) {
+                switch (response.code()) {
+                    case 200:
+                        currentContent = response.body();
+                        contentList.add(new ExhibitContentHeader(
+                                currentContent.getProjectName(),
+//                                currentContent.get,
+                                "", Integer.parseInt(currentContent.getFileType())
+                        ));
+                        NetworkHelper.getNetworkInstance().getImageList(ExhibitContentSingleTon.currentSelectedProjectId).enqueue(new Callback<ArrayList<String>>() {
+                            @Override
+                            public void onResponse(Call<ArrayList<String>> call, Response<ArrayList<String>> response) {
+                                switch (response.code()) {
+                                    case 200:
+                                        for (String s : response.body()) {
+                                            contentList.add(s);
+                                        }
+                                        initializeContentView();
+                                        break;
+                                    default:
+                                        Toast.makeText(getContext(), "데이터를 가져오는 데 문제가 발생했습니다. 잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+                                        break;
+                                }
+                            }
+
+                            private void initializeContentView() {
+                                LastAdapter.with(contentList, BR.content)
+                                        .map(ExhibitContentHeader.class, new ItemType<ViewContentHeaderBinding>(R.layout.view_content_header) {
+                                            @Override
+                                            public void onBind(@NotNull ViewHolder<ViewContentHeaderBinding> viewHolder) {
+                                                super.onBind(viewHolder);
+                                            }
+                                        })
+                                        .map(String.class, new ItemType<ViewContentBinding>(R.layout.view_content) {
+                                            @Override
+                                            public void onBind(@NotNull ViewHolder<ViewContentBinding> viewHolder) {
+                                                super.onBind(viewHolder);
+                                                viewHolder.getBinding().networkImageView.setImageUrl(
+                                                        (String) contentList.get(viewHolder.getAdapterPosition()),
+                                                        ImageSingleTon.getInstance(getContext()).getImageLoader()
+                                                );
+                                            }
+                                        })
+                                        .handler(new LayoutHandler() {
+                                            @Override
+                                            public int getItemLayout(@NotNull Object o, int i) {
+                                                if (o instanceof ExhibitContentHeader)
+                                                    return R.layout.view_content_header;
+                                                return R.layout.view_content;
+                                            }
+                                        })
+                                        .into(contentRecyclerView);
+                            }
+
+                            @Override
+                            public void onFailure(Call<ArrayList<String>> call, Throwable t) {
+                                Toast.makeText(getContext(), "데이터를 가져오는 데 문제가 발생했습니다. 잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+                                Log.e("Asdf", t.getLocalizedMessage());
+                            }
+                        });
+                        break;
+                    default:
+                        Toast.makeText(getContext(), "데이터를 가져오는 데 문제가 발생했습니다. 잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+                        break;
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ExhibitContent> call, Throwable t) {
+                Toast.makeText(getContext(), "데이터를 가져오는 데 문제가 발생했습니다. 잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+                Log.e("asdf", t.getLocalizedMessage());
+            }
+        });
     }
 }

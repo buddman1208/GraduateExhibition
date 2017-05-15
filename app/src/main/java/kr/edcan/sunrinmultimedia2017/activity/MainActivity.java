@@ -27,6 +27,7 @@ import kr.edcan.sunrinmultimedia2017.R;
 import kr.edcan.sunrinmultimedia2017.databinding.ActivityMainBinding;
 import kr.edcan.sunrinmultimedia2017.databinding.ExhibitContentBinding;
 import kr.edcan.sunrinmultimedia2017.models.ExhibitContent;
+import kr.edcan.sunrinmultimedia2017.models.ExhibitContentSingleTon;
 import kr.edcan.sunrinmultimedia2017.utils.ImageSingleTon;
 import kr.edcan.sunrinmultimedia2017.utils.NetworkHelper;
 import retrofit2.Call;
@@ -177,7 +178,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void onCardClick(String projectId) {
-        startActivity(new Intent(getApplicationContext(), ViewActivity.class)
-                .putExtra("projectId", projectId));
+        ExhibitContentSingleTon.currentSelectedProjectId = projectId;
+        startActivity(new Intent(getApplicationContext(), ViewActivity.class));
     }
 }
