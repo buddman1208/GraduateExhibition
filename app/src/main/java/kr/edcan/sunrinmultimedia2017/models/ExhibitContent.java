@@ -7,17 +7,17 @@ import java.util.ArrayList;
  */
 
 public class ExhibitContent {
-    private String fileType, projectName, korAutor, engAutor, email, projectId;
+    private String fileType, projectName, korAuthor, engAuthor, email, projectId;
     private ArrayList<String> fileName;
 
     public ExhibitContent() {
     }
 
-    public ExhibitContent(String fileType, String projectName, String korAutor, String engAutor, String email, String projectId, ArrayList<String> fileName) {
+    public ExhibitContent(String fileType, String projectName, String korAuthor, String engAuthor, String email, String projectId, ArrayList<String> fileName) {
         this.fileType = fileType;
         this.projectName = projectName;
-        this.korAutor = korAutor;
-        this.engAutor = engAutor;
+        this.korAuthor = korAuthor;
+        this.engAuthor = engAuthor;
         this.email = email;
         this.projectId = projectId;
         this.fileName = fileName;
@@ -39,20 +39,20 @@ public class ExhibitContent {
         this.projectName = projectName;
     }
 
-    public String getKorAutor() {
-        return korAutor;
+    public String getKorAuthor() {
+        return korAuthor;
     }
 
-    public void setKorAutor(String korAutor) {
-        this.korAutor = korAutor;
+    public void setKorAuthor(String korAuthor) {
+        this.korAuthor = korAuthor;
     }
 
-    public String getEngAutor() {
-        return engAutor;
+    public String getEngAuthor() {
+        return engAuthor;
     }
 
-    public void setEngAutor(String engAutor) {
-        this.engAutor = engAutor;
+    public void setEngAuthor(String engAuthor) {
+        this.engAuthor = engAuthor;
     }
 
     public String getEmail() {

@@ -23,7 +23,7 @@
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
             android:src="@drawable/image01"
-            android:background=""
+            android:background="#3c3c3c"
             android:tint="#aa000000" />
 
         <LinearLayout
@@ -50,7 +50,7 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:singleLine="true"
-                android:text="@{content.korAutor}"
+                android:text="@{content.korAuthor}"
                 android:textColor="#8fFFFFFF"
                 android:textSize="14sp" />
         </LinearLayout>
