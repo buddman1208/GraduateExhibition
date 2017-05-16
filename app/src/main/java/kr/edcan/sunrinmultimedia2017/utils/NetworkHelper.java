@@ -13,7 +13,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 
 public class NetworkHelper {
-    private final static String url = "http://13.124.125.184/";
+    private final static String url = "http://13.124.125.184";
     private final static int port = 3000;
 
     private static Retrofit retrofit;

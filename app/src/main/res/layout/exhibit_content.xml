@@ -23,6 +23,7 @@
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
             android:src="@drawable/image01"
+            android:background=""
             android:tint="#aa000000" />
 
         <LinearLayout
@@ -38,7 +39,7 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:singleLine="true"
-                android:text="Lorem ipsum"
+                android:text="@{content.projectName}"
                 android:textColor="#FFF"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -49,7 +50,7 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:singleLine="true"
-                android:text="Lorem ipsum"
+                android:text="@{content.korAutor}"
                 android:textColor="#8fFFFFFF"
                 android:textSize="14sp" />
         </LinearLayout>

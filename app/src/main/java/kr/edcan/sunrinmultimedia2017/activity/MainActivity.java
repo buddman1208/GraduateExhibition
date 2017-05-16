@@ -85,6 +85,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void setTab(int position) {
+        dataList.clear();
+
         for (int i = 0; i < tabList.size(); i++) {
             tabList.get(i).setImageResource((i == position) ? onResList.get(i) : offResList.get(i));
             tabIndicatorList.get(i).setVisibility((i == position) ? View.VISIBLE : View.INVISIBLE);
@@ -93,15 +95,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             NetworkHelper.getNetworkInstance().getAllProjects().enqueue(new Callback<ArrayList<ExhibitContent>>() {
                 @Override
                 public void onResponse(Call<ArrayList<ExhibitContent>> call, Response<ArrayList<ExhibitContent>> response) {
-                    switch (response.code()){
+                    switch (response.code()) {
                         case 200:
-                            for(ExhibitContent content: response.body()){
+                            for (ExhibitContent content : response.body()) {
                                 dataList.add(content);
-                                if(adapter == null) initializeRecyclerView();
-                                else adapter.notifyDataSetChanged();
+                                if (adapter == null) initializeRecyclerView();
+                                else {
+                                    mainRecyclerView.stopScroll();
+                                    mainRecyclerView.getLayoutManager().scrollToPosition(0);
+                                    adapter.notifyDataSetChanged();
+                                }
                             }
                             break;
                         default:
+                            Log.e("asdf", response.code() + "");
                             Toast.makeText(MainActivity.this, "데이터를 가져오는 데 문제가 발생했습니다. 잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -113,21 +120,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 }
             });
-        }
-        else {
+        } else {
             NetworkHelper.getNetworkInstance().getProjectsByFileType(position).enqueue(new Callback<ArrayList<ExhibitContent>>() {
                 @Override
                 public void onResponse(Call<ArrayList<ExhibitContent>> call, Response<ArrayList<ExhibitContent>> response) {
-                    switch (response.code()){
+                    switch (response.code()) {
                         case 200:
-                            for(ExhibitContent content: response.body()){
+                            for (ExhibitContent content : response.body()) {
                                 dataList.add(content);
-                                if(adapter == null) initializeRecyclerView();
-                                else adapter.notifyDataSetChanged();
+                                if (adapter == null) initializeRecyclerView();
+                                else {
+                                    mainRecyclerView.stopScroll();
+                                    mainRecyclerView.getLayoutManager().scrollToPosition(0);
+                                    adapter.notifyDataSetChanged();
+                                }
                             }
                             break;
                         default:
                             Toast.makeText(MainActivity.this, "데이터를 가져오는 데 문제가 발생했습니다. 잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+                            Log.e("asdf", response.code() + "");
                     }
                 }
 
@@ -139,7 +150,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             });
         }
     }
-    public void initializeRecyclerView(){
+
+    public void initializeRecyclerView() {
         adapter = LastAdapter.with(dataList, BR.content)
                 .map(ExhibitContent.class, new ItemType<ExhibitContentBinding>(R.layout.exhibit_content) {
                     @Override
@@ -147,7 +159,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         super.onBind(viewHolder);
                         viewHolder.getBinding().setActivity(MainActivity.this);
                         viewHolder.getBinding().image.setImageUrl(
-                                dataList.get(viewHolder.getAdapterPosition()).getFileName().get(0), ImageSingleTon.getInstance(getApplicationContext()).getImageLoader());
+                                "http://13.124.125.184:3000/image/" + dataList.get(viewHolder.getAdapterPosition()).getFileName().get(0), ImageSingleTon.getInstance(getApplicationContext()).getImageLoader());
                     }
                 })
                 .into(mainRecyclerView);

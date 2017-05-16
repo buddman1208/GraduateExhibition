@@ -126,6 +126,7 @@ public class ViewFragment extends Fragment {
 
                         break;
                     default:
+                        Log.e("asdf", response.code() + "");
                         Toast.makeText(getContext(), "데이터를 가져오는 데 문제가 발생했습니다. 잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
                         break;
                 }
@@ -162,6 +163,7 @@ public class ViewFragment extends Fragment {
                                         initializeContentView();
                                         break;
                                     default:
+                                        Log.e("asdf", response.code() + "");
                                         Toast.makeText(getContext(), "데이터를 가져오는 데 문제가 발생했습니다. 잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
                                         break;
                                 }
@@ -205,6 +207,7 @@ public class ViewFragment extends Fragment {
                         break;
                     default:
                         Toast.makeText(getContext(), "데이터를 가져오는 데 문제가 발생했습니다. 잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+                        Log.e("asdf", response.code() + "");
                         break;
 
                 }
