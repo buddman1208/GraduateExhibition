@@ -1,5 +1,9 @@
 package kr.edcan.sunrinmultimedia2017.models;
 
+import android.net.Network;
+
+import kr.edcan.sunrinmultimedia2017.utils.NetworkHelper;
+
 /**
  * Created by Junseok Oh on 2017-05-13.
  */
@@ -25,10 +29,10 @@ public class ExhibitContentHeader {
     }
 
     public String getType() {
-        return typeStringArr[type];
+        return typeStringArr[NetworkHelper.getRealRealType(type)];
     }
 
     public String getColor() {
-        return colorStringArr[type];
+        return colorStringArr[NetworkHelper.getRealRealType(type)];
     }
 }

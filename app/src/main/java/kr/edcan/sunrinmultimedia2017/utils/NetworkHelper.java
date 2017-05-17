@@ -32,4 +32,21 @@ public class NetworkHelper {
         ConnectivityManager connectivityManager = ((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE));
         return connectivityManager.getActiveNetworkInfo() != null && connectivityManager.getActiveNetworkInfo().isConnected();
     }
+
+    public static int getRealRealType(int position){
+        switch (position){
+            case 0:
+                return 0;
+            case 1:
+                return 2;
+            case 2:
+            case 3:
+                return 3;
+            case 4:
+                return 1;
+            case 5:
+                return 4;
+        }
+        return -1;
+    }
 }

@@ -59,9 +59,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void initializeTab() {
         Collections.addAll(tabList,
-                binding.tabAll, binding.tabIllust, binding.tabPackage, binding.tabGraphics, binding.tabVideo, binding.tab3D);
+                binding.tabAll, binding.tabIllust, binding.tabGraphics, binding.tabPackage, binding.tabVideo, binding.tab3D);
         Collections.addAll(tabIndicatorList,
-                binding.dividerAll, binding.dividerGraphics, binding.dividerIllust, binding.dividerPackage, binding.dividerVideo, binding.divider3D);
+                binding.dividerAll, binding.dividerIllust, binding.dividerGraphics, binding.dividerPackage, binding.dividerVideo, binding.divider3D);
         Collections.addAll(onResList,
                 R.drawable.btn_tabs_all, R.drawable.btn_tabs_illust, R.drawable.btn_tabs_graphics, R.drawable.btn_tabs_package, R.drawable.btn_tabs_video, R.drawable.btn_tabs_threedimension);
         Collections.addAll(offResList,
@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
             });
         } else {
-            NetworkHelper.getNetworkInstance().getProjectsByFileType(position).enqueue(new Callback<ArrayList<ExhibitContent>>() {
+            NetworkHelper.getNetworkInstance().getProjectsByFileType(position-1).enqueue(new Callback<ArrayList<ExhibitContent>>() {
                 @Override
                 public void onResponse(Call<ArrayList<ExhibitContent>> call, Response<ArrayList<ExhibitContent>> response) {
                     switch (response.code()) {

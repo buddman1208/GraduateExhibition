@@ -59,8 +59,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_margin="@dimen/activity_horizontal_margin"
-            android:text="@{content.realType}"
-            android:textColor="#FFF" />
+            android:text="@{content.realType}" />
 
         <View
             android:layout_width="match_parent"

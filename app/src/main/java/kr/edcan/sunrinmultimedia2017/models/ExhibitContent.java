@@ -2,6 +2,8 @@ package kr.edcan.sunrinmultimedia2017.models;
 
 import java.util.ArrayList;
 
+import kr.edcan.sunrinmultimedia2017.utils.NetworkHelper;
+
 /**
  * Created by Junseok Oh on 2017-05-13.
  */
@@ -81,6 +83,9 @@ public class ExhibitContent {
     }
 
     public String getRealType() {
-        return new String[]{"일러스트", "그래픽", "패키지 / 에디토리얼 디자인", "영상", "3D / 게임"}[Integer.parseInt(fileType)];
+        return new String[]{"일러스트", "그래픽", "패키지 / 에디토리얼 디자인", "영상", "3D / 게임"}[NetworkHelper.getRealRealType(Integer.parseInt(fileType))];
+    }
+    public String getColor(){
+        return colorStringArr[NetworkHelper.getRealRealType(Integer.parseInt(fileType))];
     }
 }
