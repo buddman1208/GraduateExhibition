@@ -1,7 +1,6 @@
 <layout>
 
     <data>
-
         <variable
             name="content"
             type="kr.edcan.sunrinmultimedia2017.models.Author" />
@@ -46,7 +45,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{content.korName}"
+                    android:text="@{content.korAuthor}"
                     android:textColor="@android:color/black"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -55,7 +54,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
-                    android:text="@{content.engName}"
+                    android:text="@{content.engAuthor}"
                     android:textColor="@android:color/black"
                     android:textSize="12sp" />
             </LinearLayout>

@@ -110,7 +110,7 @@ public class ViewFragment extends Fragment {
                                     public void onBind(@NotNull ViewHolder<AuthorContentBinding> viewHolder) {
                                         super.onBind(viewHolder);
                                         viewHolder.getBinding().profileImage.setImageUrl(
-                                                authorList.get(viewHolder.getAdapterPosition()).getProfileImageUrl(),
+                                                "http://13.124.125.184:3000/profile/" + authorList.get(viewHolder.getAdapterPosition()).getKorAuthor() + ".png",
                                                 ImageSingleTon.getInstance(getContext()).getImageLoader()
                                         );
 
@@ -141,12 +141,12 @@ public class ViewFragment extends Fragment {
     }
 
     public void getExhibitInfo() {
-        NetworkHelper.getNetworkInstance().getProjectsByProjectId(ExhibitContentSingleTon.currentSelectedProjectId).enqueue(new Callback<ExhibitContent>() {
+        NetworkHelper.getNetworkInstance().getProjectsByProjectId(ExhibitContentSingleTon.currentSelectedProjectId).enqueue(new Callback<ArrayList<ExhibitContent>>() {
             @Override
-            public void onResponse(Call<ExhibitContent> call, Response<ExhibitContent> response) {
+            public void onResponse(Call<ArrayList<ExhibitContent>> call, Response<ArrayList<ExhibitContent>> response) {
                 switch (response.code()) {
                     case 200:
-                        currentContent = response.body();
+                        currentContent = response.body().get(0);
                         contentList.add(new ExhibitContentHeader(
                                 currentContent.getProjectName(),
 //                                currentContent.get,
@@ -182,7 +182,7 @@ public class ViewFragment extends Fragment {
                                             public void onBind(@NotNull ViewHolder<ViewContentBinding> viewHolder) {
                                                 super.onBind(viewHolder);
                                                 viewHolder.getBinding().networkImageView.setImageUrl(
-                                                        (String) contentList.get(viewHolder.getAdapterPosition()),
+                                                        "http://13.124.125.184:3000/image/" + (String) contentList.get(viewHolder.getAdapterPosition()),
                                                         ImageSingleTon.getInstance(getContext()).getImageLoader()
                                                 );
                                             }
@@ -214,7 +214,7 @@ public class ViewFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<ExhibitContent> call, Throwable t) {
+            public void onFailure(Call<ArrayList<ExhibitContent>> call, Throwable t) {
                 Toast.makeText(getContext(), "데이터를 가져오는 데 문제가 발생했습니다. 잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
                 Log.e("asdf", t.getLocalizedMessage());
             }

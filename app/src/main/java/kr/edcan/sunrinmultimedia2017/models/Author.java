@@ -5,21 +5,21 @@ package kr.edcan.sunrinmultimedia2017.models;
  */
 
 public class Author {
-    private String korName, engName, email,  profileImageUrl;
+    private String korAuthor, engAuthor, email,  profileImageUrl;
 
-    public Author(String korName, String engName, String email, String profileImageUrl) {
-        this.korName = korName;
-        this.engName = engName;
+    public Author(String korAuthor, String engAuthor, String email, String profileImageUrl) {
+        this.korAuthor = korAuthor;
+        this.engAuthor = engAuthor;
         this.email = email;
         this.profileImageUrl = profileImageUrl;
     }
 
-    public String getKorName() {
-        return korName;
+    public String getKorAuthor() {
+        return korAuthor;
     }
 
-    public String getEngName() {
-        return engName;
+    public String getEngAuthor() {
+        return engAuthor;
     }
 
     public String getEmail() {

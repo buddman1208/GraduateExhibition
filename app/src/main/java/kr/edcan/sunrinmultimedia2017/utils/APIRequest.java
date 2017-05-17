@@ -21,12 +21,12 @@ public interface APIRequest {
     Call<ArrayList<ExhibitContent>> getProjectsByFileType(@Query("fileType") int fileType);
 
     @GET("/project/id")
-    Call<ExhibitContent> getProjectsByProjectId(@Query("projectId") String projectId);
+    Call<ArrayList<ExhibitContent>> getProjectsByProjectId(@Query("projectId") String projectId);
 
     @GET("/image")
     Call<ArrayList<String>> getImageList(@Query("projectId") String projectId);
 
-    @GET("/profile")
+    @GET("/profile/id")
     Call<ArrayList<Author>> getAuthorList(@Query("projectId") String projectId);
 
 
