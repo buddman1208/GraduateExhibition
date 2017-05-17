@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import kr.edcan.sunrinmultimedia2017.models.Author;
 import kr.edcan.sunrinmultimedia2017.models.ExhibitContent;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
@@ -26,8 +27,10 @@ public interface APIRequest {
     @GET("/image")
     Call<ArrayList<String>> getImageList(@Query("projectId") String projectId);
 
-    @GET("/profile/id")
+    @GET("/profile")
     Call<ArrayList<Author>> getAuthorList(@Query("projectId") String projectId);
 
+    @GET("/project/explain")
+    Call<ResponseBody> getDescription(@Query("projectId") String projectId);
 
 }

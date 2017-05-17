@@ -21,6 +21,7 @@ import com.github.nitrico.lastadapter.ViewHolder;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -37,6 +38,7 @@ import kr.edcan.sunrinmultimedia2017.models.ExhibitContentHeader;
 import kr.edcan.sunrinmultimedia2017.models.ExhibitContentSingleTon;
 import kr.edcan.sunrinmultimedia2017.utils.ImageSingleTon;
 import kr.edcan.sunrinmultimedia2017.utils.NetworkHelper;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -51,6 +53,7 @@ public class ViewFragment extends Fragment {
     private ArrayList<Author> authorList = new ArrayList<>();
     private ArrayList<Object> contentList = new ArrayList<>();
     private ExhibitContent currentContent = null;
+    private String currentContentInfo;
 
     public ViewFragment() {
     }
@@ -86,8 +89,7 @@ public class ViewFragment extends Fragment {
         contentRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         // Get Image List from Server
-        getExhibitInfo();
-
+        getExhibitContent();
 
     }
 
@@ -140,7 +142,35 @@ public class ViewFragment extends Fragment {
         });
     }
 
-    public void getExhibitInfo() {
+    public void getExhibitContent() {
+        NetworkHelper.getNetworkInstance().getDescription(ExhibitContentSingleTon.currentSelectedProjectId).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                switch (response.code()) {
+                    case 200:
+                        try {
+                            String result = response.body().string();
+                            Log.e("getExhibitContent", result);
+                            getExhibitInfo(result);
+                        } catch (IOException e) {
+                            Log.e("asdf", e.getLocalizedMessage());
+                        }
+                        break;
+                    default:
+                        Toast.makeText(getContext(), "데이터를 가져오는 데 문제가 발생했습니다. 잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.e("asdf", "getExhibitContent : " + t.getMessage());
+
+            }
+        });
+
+    }
+
+    public void getExhibitInfo(final String content) {
         NetworkHelper.getNetworkInstance().getProjectsByProjectId(ExhibitContentSingleTon.currentSelectedProjectId).enqueue(new Callback<ArrayList<ExhibitContent>>() {
             @Override
             public void onResponse(Call<ArrayList<ExhibitContent>> call, Response<ArrayList<ExhibitContent>> response) {
@@ -150,7 +180,7 @@ public class ViewFragment extends Fragment {
                         contentList.add(new ExhibitContentHeader(
                                 currentContent.getProjectName(),
 //                                currentContent.get,
-                                "", Integer.parseInt(currentContent.getFileType())
+                                content, Integer.parseInt(currentContent.getFileType())
                         ));
                         NetworkHelper.getNetworkInstance().getImageList(ExhibitContentSingleTon.currentSelectedProjectId).enqueue(new Callback<ArrayList<String>>() {
                             @Override
@@ -201,7 +231,7 @@ public class ViewFragment extends Fragment {
                             @Override
                             public void onFailure(Call<ArrayList<String>> call, Throwable t) {
                                 Toast.makeText(getContext(), "데이터를 가져오는 데 문제가 발생했습니다. 잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
-                                Log.e("Asdf", t.getLocalizedMessage());
+                                Log.e("Asdf_string", t.getLocalizedMessage());
                             }
                         });
                         break;
@@ -216,7 +246,7 @@ public class ViewFragment extends Fragment {
             @Override
             public void onFailure(Call<ArrayList<ExhibitContent>> call, Throwable t) {
                 Toast.makeText(getContext(), "데이터를 가져오는 데 문제가 발생했습니다. 잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
-                Log.e("asdf", t.getLocalizedMessage());
+                Log.e("asdf_exhibitcontent", t.getLocalizedMessage());
             }
         });
     }
