@@ -9,6 +9,7 @@ import java.util.ArrayList;
 public class ExhibitContent {
     private String fileType, projectName, korAuthor, engAuthor, email, projectId;
     private ArrayList<String> fileName;
+    private String[] colorStringArr = {"#B388FF", "#43A047", "#8E24AA", "#FBC02D", "#E91E63", "#00BCD4"};
 
     public ExhibitContent() {
     }
@@ -80,6 +81,6 @@ public class ExhibitContent {
     }
 
     public String getRealType() {
-        return "그래픽";
+        return new String[]{"일러스트", "그래픽", "패키지 / 에디토리얼 디자인", "영상", "3D / 게임"}[Integer.parseInt(fileType)];
     }
 }

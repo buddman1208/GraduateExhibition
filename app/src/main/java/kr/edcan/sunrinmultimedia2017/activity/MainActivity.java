@@ -59,13 +59,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void initializeTab() {
         Collections.addAll(tabList,
-                binding.tabAll, binding.tabGraphics, binding.tabIllust, binding.tabPackage, binding.tabVideo, binding.tab3D);
+                binding.tabAll, binding.tabIllust, binding.tabPackage, binding.tabGraphics, binding.tabVideo, binding.tab3D);
         Collections.addAll(tabIndicatorList,
                 binding.dividerAll, binding.dividerGraphics, binding.dividerIllust, binding.dividerPackage, binding.dividerVideo, binding.divider3D);
         Collections.addAll(onResList,
-                R.drawable.btn_tabs_all, R.drawable.btn_tabs_graphics, R.drawable.btn_tabs_illust, R.drawable.btn_tabs_package, R.drawable.btn_tabs_video, R.drawable.btn_tabs_threedimension);
+                R.drawable.btn_tabs_all, R.drawable.btn_tabs_illust, R.drawable.btn_tabs_graphics, R.drawable.btn_tabs_package, R.drawable.btn_tabs_video, R.drawable.btn_tabs_threedimension);
         Collections.addAll(offResList,
-                R.drawable.btn_tabs_all_off, R.drawable.btn_tabs_graphics_off, R.drawable.btn_tabs_illust_off, R.drawable.btn_tabs_package_off, R.drawable.btn_tabs_video_off, R.drawable.btn_tabs_threedimension_off);
+                R.drawable.btn_tabs_all_off, R.drawable.btn_tabs_illust_off, R.drawable.btn_tabs_graphics_off, R.drawable.btn_tabs_package_off, R.drawable.btn_tabs_video_off, R.drawable.btn_tabs_threedimension_off);
 
         binding.container1.setOnClickListener(this);
         binding.container2.setOnClickListener(this);
