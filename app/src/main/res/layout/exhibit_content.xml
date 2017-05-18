@@ -5,26 +5,30 @@
         <variable
             name="content"
             type="kr.edcan.sunrinmultimedia2017.models.ExhibitContent" />
+
         <variable
             name="activity"
-            type="kr.edcan.sunrinmultimedia2017.activity.MainActivity"/>
+            type="kr.edcan.sunrinmultimedia2017.activity.MainActivity" />
     </data>
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="170dp"
-        android:onClick="@{() -> activity.onCardClick(content.projectId)}"
+        android:layout_height="200dp"
         android:foreground="?attr/selectableItemBackground"
+        android:onClick="@{() -> activity.onCardClick(content.projectId)}"
         android:orientation="vertical">
+
+
 
         <com.android.volley.toolbox.NetworkImageView
             android:id="@+id/image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="centerCrop"
-            android:background="#3c3c3c"
-            android:tint="#aa000000" />
-
+            android:scaleType="centerCrop" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/grid_background" />
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -40,7 +44,7 @@
                 android:singleLine="true"
                 android:text="@{content.projectName}"
                 android:textColor="#FFF"
-                android:textSize="18sp"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -51,20 +55,24 @@
                 android:singleLine="true"
                 android:text="@{content.korAuthor}"
                 android:textColor="#8fFFFFFF"
-                android:textSize="14sp" />
+                android:textSize="15sp" />
         </LinearLayout>
 
         <TextView
+            android:id="@+id/type"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
+            android:textSize="16sp"
             android:layout_margin="@dimen/activity_horizontal_margin"
-            android:text="@{content.realType}" />
+            android:text="@{content.realType}"
+            android:textStyle="bold" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="2dp"
             android:layout_alignParentBottom="true"
             android:background="#FFF" />
+
     </RelativeLayout>
 </layout>

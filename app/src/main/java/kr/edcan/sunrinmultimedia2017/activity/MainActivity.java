@@ -3,6 +3,7 @@ package kr.edcan.sunrinmultimedia2017.activity;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -159,7 +160,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         super.onBind(viewHolder);
                         viewHolder.getBinding().setActivity(MainActivity.this);
                         viewHolder.getBinding().image.setImageUrl(
-                                "http://13.124.125.184:3000/image/" + dataList.get(viewHolder.getAdapterPosition()).getFileName().get(0), ImageSingleTon.getInstance(getApplicationContext()).getImageLoader());
+                                "http://13.124.125.184:3000/thunbnale?projectId=" + dataList.get(viewHolder.getAdapterPosition()).getProjectId(), ImageSingleTon.getInstance(getApplicationContext()).getImageLoader());
+//                        viewHolder.getBinding().type.setTextColor(Color.parseColor(dataList.get(viewHolder.getAdapterPosition()).getColor()));
+                        viewHolder.getBinding().type.setTextColor(Color.WHITE);
                     }
                 })
                 .into(mainRecyclerView);
