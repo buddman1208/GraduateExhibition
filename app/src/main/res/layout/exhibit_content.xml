@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:foreground="?attr/selectableItemBackground"
-        android:onClick="@{() -> activity.onCardClick(content.projectId)}"
+        android:onClick="@{() -> activity.onCardClick(content.projectId, content)}"
         android:orientation="vertical">
 
 

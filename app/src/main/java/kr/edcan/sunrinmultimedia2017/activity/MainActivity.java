@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
             });
         } else {
-            NetworkHelper.getNetworkInstance().getProjectsByFileType(position-1).enqueue(new Callback<ArrayList<ExhibitContent>>() {
+            NetworkHelper.getNetworkInstance().getProjectsByFileType(position - 1).enqueue(new Callback<ArrayList<ExhibitContent>>() {
                 @Override
                 public void onResponse(Call<ArrayList<ExhibitContent>> call, Response<ArrayList<ExhibitContent>> response) {
                     switch (response.code()) {
@@ -192,8 +192,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    public void onCardClick(String projectId) {
+    public void onCardClick(String projectId, ExhibitContent content) {
         ExhibitContentSingleTon.currentSelectedProjectId = projectId;
+        if (content.getRealType().equals("영상"))
+            ExhibitContentSingleTon.isCurrentProjectVideo = true;
         startActivity(new Intent(getApplicationContext(), ViewActivity.class));
     }
 }

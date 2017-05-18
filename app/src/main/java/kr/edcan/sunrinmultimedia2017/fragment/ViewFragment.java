@@ -1,13 +1,18 @@
 package kr.edcan.sunrinmultimedia2017.fragment;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -54,6 +59,8 @@ public class ViewFragment extends Fragment {
     private ArrayList<Object> contentList = new ArrayList<>();
     private ExhibitContent currentContent = null;
     private String currentContentInfo;
+    private Menu menu;
+    private MenuInflater menuInflater;
 
     public ViewFragment() {
     }
@@ -182,6 +189,7 @@ public class ViewFragment extends Fragment {
 //                                currentContent.get,
                                 content, Integer.parseInt(currentContent.getFileType())
                         ));
+
                         NetworkHelper.getNetworkInstance().getImageList(ExhibitContentSingleTon.currentSelectedProjectId).enqueue(new Callback<ArrayList<String>>() {
                             @Override
                             public void onResponse(Call<ArrayList<String>> call, Response<ArrayList<String>> response) {
@@ -226,6 +234,7 @@ public class ViewFragment extends Fragment {
                                             }
                                         })
                                         .into(contentRecyclerView);
+
                             }
 
                             @Override
@@ -250,4 +259,6 @@ public class ViewFragment extends Fragment {
             }
         });
     }
+
+
 }

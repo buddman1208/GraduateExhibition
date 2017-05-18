@@ -6,4 +6,5 @@ package kr.edcan.sunrinmultimedia2017.models;
 
 public class ExhibitContentSingleTon {
     public static String currentSelectedProjectId = "";
+    public static boolean isCurrentProjectVideo = false;
 }
